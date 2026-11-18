@@ -5,6 +5,7 @@ import { ProjectionPanel } from "../features/projection";
 import { ViewportPanel, ViewControls } from "../features/viewport";
 import { EdgePanel } from "../features/edge";
 import { ExportPanel } from "../features/export";
+import { ComparePanel, ActiveSideSwitch } from "../features/compare";
 import { useStudio } from "./useStudio";
 const doc = useStudio();
 </script>
@@ -36,8 +37,10 @@ const doc = useStudio();
           <span>✳ &nbsp; MADE FOR YOUR PERSPECTIVE</span>
         </div>
       </aside>
-      <ViewportPanel :doc="doc" />
+      <ComparePanel v-if="doc.compare.enabled" :doc="doc" />
+      <ViewportPanel v-else :doc="doc" />
       <aside class="right-sidebar">
+        <ActiveSideSwitch v-if="doc.compare.enabled" :doc="doc" />
         <ViewControls :doc="doc" /><EdgePanel :doc="doc" /><ExportPanel
           :doc="doc"
         />

@@ -1,4 +1,4 @@
-import type { Projection, Edge } from "./types";
+import type { Projection, Edge, CompareState } from "./types";
 export const defaultProjection = (): Projection => ({
   mode: "planet",
   zoom: 1,
@@ -11,4 +11,10 @@ export const defaultEdge = (): Edge => ({
   feather: 0,
   background: "#e9eff4",
   transparent: false,
+});
+export const defaultCompare = (): CompareState => ({
+  enabled: false,
+  linked: true,
+  layout: "split",
+  split: 0.5,
 });

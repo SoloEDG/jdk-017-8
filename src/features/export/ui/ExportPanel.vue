@@ -56,18 +56,45 @@ const { busy, progress, message, download, cancel } = useExport(doc);
         max="1"
         step="0.01"
         v-model.number="settings.quality" /></label
-    ><MatteNotice :edge="doc.edge" :format="settings.format" /><button
+    ><MatteNotice :edge="doc.edge" :format="settings.format" />
+    <div v-if="doc.compare.enabled" class="format-row">
+      <span>分别导出</span>
+      <div class="segmented small">
+        <button
+          :disabled="busy || !doc.asset"
+          title="按左侧当前设置导出一张"
+          @click="download(settings, 'left')"
+        >
+          仅左侧</button
+        ><button
+          :disabled="busy || !doc.asset"
+          title="按右侧当前设置导出一张"
+          @click="download(settings, 'right')"
+        >
+          仅右侧
+        </button>
+      </div>
+    </div>
+    <button
       class="primary export-button"
       :disabled="!doc.asset || busy"
-      @click="download(settings)"
+      @click="download(settings, doc.compare.enabled ? 'pair' : 'single')"
     >
       <ArrowDownToLine :size="16" />{{
-        busy ? `正在导出 ${Math.round(progress * 100)}%` : "导出我的星球"
+        busy
+          ? `正在导出 ${Math.round(progress * 100)}%`
+          : doc.compare.enabled
+            ? "成对导出（并排图）"
+            : "导出我的星球"
       }}<span v-if="!busy">↗</span></button
     ><button v-if="busy" class="text-button" @click="cancel">取消导出</button>
     <p v-if="message" role="status" class="mini">{{ message }}</p>
     <p class="export-foot">
-      预估像素内存 {{ estimatedMemory(settings) }} MB · 构图不随尺寸改变
+      {{
+        doc.compare.enabled
+          ? `成对导出 ${settings.size * 2} × ${settings.size} · 峰值约 ${estimatedMemory(settings) * 3} MB · 不含分隔线与选中框`
+          : `预估像素内存 ${estimatedMemory(settings)} MB · 构图不随尺寸改变`
+      }}
     </p>
   </section>
 </template>

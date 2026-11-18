@@ -7,10 +7,12 @@ import {
   Plus,
   Minus,
   ScanLine,
+  Columns2,
 } from "lucide-vue-next";
 import type { StudioDocument, Projection } from "../../../shared/types";
 import { usePreview } from "../model/usePreview";
 import { dragView, wheelZoom } from "../lib/gestures";
+import { enableCompare } from "../../compare";
 const { doc } = defineProps<{ doc: StudioDocument }>();
 const canvas = ref<HTMLCanvasElement>();
 const { rendering } = usePreview(doc, canvas);
@@ -89,6 +91,12 @@ function wheel(e: WheelEvent) {
         >
           <Plus :size="16" /></button
         ><b /><button
+          aria-label="开启对照"
+          title="开启对照工作区"
+          @click="enableCompare(doc)"
+        >
+          <Columns2 :size="16" /></button
+        ><button
           aria-label="切换辅助线"
           :class="{ selected: guides }"
           @click="guides = !guides"
